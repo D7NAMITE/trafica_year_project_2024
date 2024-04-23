@@ -52,7 +52,7 @@ async def get_day_aqi(day_id: int) -> list[AQIValues]:
     :return: List of AQIValues contain aqi values in the selected day
     """
     with pool.connection() as conn, conn.cursor() as cs:
-        cs.execute("""
+        cs.execute("""1
             SELECT TS,
             AQI_US,
             PM25
@@ -62,4 +62,3 @@ async def get_day_aqi(day_id: int) -> list[AQIValues]:
         result = [AQIValues(date=DATE, aqi_us=AQI_US, pm25=PM25)
                   for DATE, AQI_US, PM25 in cs.fetchall()]
     return result
-
