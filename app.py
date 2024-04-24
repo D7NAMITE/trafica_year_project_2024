@@ -70,7 +70,7 @@ async def get_day_aqi(day_id: int) -> list[AQIValues]:
                   for DATE, AQI_US, PM25 in cs.fetchall()]
         if not result:
             raise HTTPException(status_code=404,
-                                detail="[AQI] Data in the day not found")
+                                detail="[AQI] Data not found")
     return result
 
 
@@ -102,7 +102,7 @@ async def get_day_noise(day_id: int) -> list[NoiseValues]:
                   for DATE, AVG in cs.fetchall()]
         if not result:
             raise HTTPException(status_code=404,
-                                detail="[Noise] Data in the day not found")
+                                detail="[Noise] Data not found")
     return result
 
 
@@ -133,14 +133,14 @@ async def get_day_traffic(day_id: int):
     """Return traffic values for a selected day"""
     with pool.connection() as conn, conn.cursor() as cs:
         cs.execute("""
-        SELECT TS as date, 
-        sector, 
-        AVG(currSpeed), 
-        AVG(freeFlowSpeed), 
-        SUM(roadClosure)
-        FROM YP_TRAFFIC
-        WHERE DAYOFWEEK(TS)=%s
-        GROUP BY date, sector
+            SELECT TS as date, 
+            sector, 
+            AVG(currSpeed), 
+            AVG(freeFlowSpeed), 
+            SUM(roadClosure)
+            FROM YP_TRAFFIC
+            WHERE DAYOFWEEK(TS)=%s
+            GROUP BY date, sector
         """, [day_id])
         result = [TrafficValues(date=DATE,
                                 sector=sector,
@@ -151,5 +151,32 @@ async def get_day_traffic(day_id: int):
                   for DATE, sector, currSpeed, freeFlowSpeed, roadClosure in cs.fetchall()]
         if not result:
             raise HTTPException(status_code=404,
-                                detail= "[Traffic] Data in the day not found")
+                                detail= "[Traffic] Data not found")
+    return result
+
+@app.get('/api/traffic/road/{road_id}')
+async def get_road_traffic(road_id: int):
+    """Return traffic values of a given road"""
+    with pool.connection() as conn, conn.cursor() as cs:
+        cs.execute("""
+            SELECT TS as date, 
+            sector, 
+            AVG(currSpeed), 
+            AVG(freeFlowSpeed), 
+            SUM(roadClosure)
+            FROM YP_TRAFFIC
+            WHERE sector=%s
+            GROUP BY date, sector
+        """, [road_id])
+        result = [TrafficValues(date=DATE,
+                                sector=sector,
+                                curr_speed=currSpeed,
+                                freeflow_speed=freeFlowSpeed,
+                                road_closure=roadClosure
+                                )
+                  for DATE, sector, currSpeed, freeFlowSpeed, roadClosure in
+                  cs.fetchall()]
+        if not result:
+            raise HTTPException(status_code=404,
+                                detail="[Traffic] Data not found")
     return result
