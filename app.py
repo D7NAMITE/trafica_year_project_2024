@@ -37,11 +37,8 @@ class TrafficValues(BaseModel):
 
 @app.get("/api/aqi/avg/daily")
 async def get_daily_avg_aqi() -> list[AQIValues]:
-    """
-    Return daily average air quality values included Air Quality Index,
+    """Return daily average air quality values included Air Quality Index,
     PM2.5 (in microgram/cubic meter).
-
-    :return: List of AQIValues contained daily average values
     """
     with pool.connection() as conn, conn.cursor() as cs:
         cs.execute("""
@@ -58,14 +55,8 @@ async def get_daily_avg_aqi() -> list[AQIValues]:
 
 @app.get("/api/aqi/day/{day_id}")
 async def get_day_aqi(day_id: int) -> list[AQIValues]:
-    """
-    Return selected day air quality values included Air Quality Index,
+    """Return selected day air quality values included Air Quality Index,
     PM2.5 (in microgram/cubic meter).
-
-    :param day_id: ID for day in the week. 1=Sunday, 2=Monday, 3=Tuesday,
-    4=Wednesday, 5=Thursday, 6=Friday, 7=Saturday.
-
-    :return: List of AQIValues contain aqi values in the selected day
     """
     with pool.connection() as conn, conn.cursor() as cs:
         cs.execute("""
@@ -85,11 +76,7 @@ async def get_day_aqi(day_id: int) -> list[AQIValues]:
 
 @app.get("/api/noise/avg/daily")
 async def get_daily_avg_noise() -> list[NoiseValues]:
-    """
-    Return average noise value of each day in decibel
-
-    :return: List of NoiseValues contain daily average values
-    """
+    """Return average noise value of each day in decibel"""
     with pool.connection() as conn, conn.cursor() as cs:
         cs.execute("""
             SELECT DATE(TS) as date,
@@ -103,14 +90,7 @@ async def get_daily_avg_noise() -> list[NoiseValues]:
 
 @app.get("/api/noise/day/{day_id}")
 async def get_day_noise(day_id: int) -> list[NoiseValues]:
-    """
-    Return selected day noise value included noise in dB.
-
-    :param day_id: ID for day in the week. 1=Sunday, 2=Monday, 3=Tuesday,
-    4=Wednesday, 5=Thursday, 6=Friday, 7=Saturday.
-
-    :return: List of NoiseValues contain noise value in the selected day
-    """
+    """Return selected day noise value included noise in dB."""
     with pool.connection() as conn, conn.cursor() as cs:
         cs.execute("""
             SELECT TS,
@@ -128,6 +108,7 @@ async def get_day_noise(day_id: int) -> list[NoiseValues]:
 
 @app.get('/api/traffic/avg/daily')
 async def get_daily_avg_traffic() -> list[TrafficValues]:
+    """Return average daily traffic"""
     with pool.connection() as conn, conn.cursor() as cs:
         cs.execute("""
             SELECT DATE(TS) as date, 
@@ -145,4 +126,30 @@ async def get_daily_avg_traffic() -> list[TrafficValues]:
                                 road_closure=roadClosure
                                 )
                   for DATE, sector, currSpeed, freeFlowSpeed, roadClosure in cs.fetchall()]
+    return result
+
+@app.get('/api/traffic/day/{day_id}')
+async def get_day_traffic(day_id: int):
+    """Return traffic values for a selected day"""
+    with pool.connection() as conn, conn.cursor() as cs:
+        cs.execute("""
+        SELECT TS as date, 
+        sector, 
+        AVG(currSpeed), 
+        AVG(freeFlowSpeed), 
+        SUM(roadClosure)
+        FROM YP_TRAFFIC
+        WHERE DAYOFWEEK(TS)=%s
+        GROUP BY date, sector
+        """, [day_id])
+        result = [TrafficValues(date=DATE,
+                                sector=sector,
+                                curr_speed=currSpeed,
+                                freeflow_speed=freeFlowSpeed,
+                                road_closure=roadClosure
+                                )
+                  for DATE, sector, currSpeed, freeFlowSpeed, roadClosure in cs.fetchall()]
+        if not result:
+            raise HTTPException(status_code=404,
+                                detail= "[Traffic] Data in the day not found")
     return result
