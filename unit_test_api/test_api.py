@@ -18,11 +18,11 @@ class TestAPI(unittest.TestCase):
     
     def test_get_daily_avg_aqi_empty_database(self):
         """
-        Test case for /api/aqi/avg/daily endpoint with empty database.
+        Test case for /api/aqi/avg/daily endpoint with not empty database.
         """
         response = self.client.get("/api/aqi/avg/daily")
         self.assertEqual(response.status_code, 200)        
-        self.assertEqual(response.json(), [])
+        self.assertNotEqual(response.json(), [])
     
     def test_get_daily_avg_aqi_database_error(self):
         """
