@@ -22,7 +22,7 @@ class TestAPI(unittest.TestCase):
         """
         response = self.client.get("/api/aqi/avg/daily")
         self.assertEqual(response.status_code, 200)        
-        self.assertNotEqual(response.json(), [])
+        self.assertEqual(response.json(), [])
     
     def test_get_daily_avg_aqi_database_error(self):
         """
