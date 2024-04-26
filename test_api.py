@@ -12,10 +12,18 @@ class TestAPI(unittest.TestCase):
         """
         Test case for successful response of /api/aqi/avg/daily endpoint.
         """
-
         response = self.client.get("/api/aqi/avg/daily")
         self.assertEqual(response.status_code, 200)
         self.assertTrue(response.json())
+    
+    def test_get_daily_avg_aqi_empty_database(self):
+        """
+        Test case for /api/aqi/avg/daily endpoint with not empty database.
+        """
+        response = self.client.get("/api/aqi/avg/daily")
+        self.assertEqual(response.status_code, 200)        
+        self.assertNotEqual(response.json(), [])
+
 
 if __name__ == '__main__':
     unittest.main()
