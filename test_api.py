@@ -18,7 +18,7 @@ class TestAPI(unittest.TestCase):
     
     def test_get_daily_avg_aqi_empty_database(self):
         """
-        Test case for /api/aqi/avg/daily endpoint with not empty database.
+        Test case for /api/aqi/avg/daily endpoint with empty database.
         """
         response = self.client.get("/api/aqi/avg/daily")
         self.assertEqual(response.status_code, 200)        
