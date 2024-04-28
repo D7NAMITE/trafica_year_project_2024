@@ -49,6 +49,15 @@ class TestAPI(unittest.TestCase):
         """
         response = self.client.get("/api/aqi/avg/daily")
         self.assertEqual(response.status_code, 500)
+    
+    def test_get_day_aqi_database_error(self):
+        """
+        Test case for database error handling in /api/aqi/day/{day_id} endpoint.
+        """
+        # Assume day_id for Monday is 2
+        day_id = 2
+        response = self.client.get(f"/api/aqi/day/{day_id}")
+        self.assertEqual(response.status_code, 500)
         
 
 
