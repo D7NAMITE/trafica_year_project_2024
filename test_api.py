@@ -189,6 +189,13 @@ class TestAPI(unittest.TestCase):
         response = self.client.get(f"/api/traffic/road/{road_id}")
         self.assertEqual(response.status_code, 500)
 
+    def test_valid_road_ids(self):
+        """Test with valid road_id values within the range 1 to 3."""
+        valid_road_ids = [1, 2, 3]
+        for road_id in valid_road_ids:
+            with self.subTest(road_id=road_id):
+                response = self.client.get(f"/api/traffic/road/{road_id}")
+                self.assertEqual(response.status_code, 200)
 
 if __name__ == '__main__':
     unittest.main()
