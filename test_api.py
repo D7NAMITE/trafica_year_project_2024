@@ -35,7 +35,7 @@ class TestAPI(unittest.TestCase):
     
     def test_get_day_aqi_non_empty_database(self):
         """
-        Test case for /api/aqi/day/{day_id}endpoint with not empty database.
+        Test case for /api/aqi/day/{day_id} endpoint with not empty database.
         """
         # Assume day_id for Monday is 2
         day_id = 2
