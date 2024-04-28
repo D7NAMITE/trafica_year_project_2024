@@ -102,6 +102,17 @@ class TestAPI(unittest.TestCase):
         response = self.client.get("/api/traffic/avg/daily")
         self.assertEqual(response.status_code, 200)        
         self.assertNotEqual(response.json(), [])
+    
+    def test_get_day_traffic_non_empty_database(self):
+        """
+        Test case for /api/traffic/day/{day_id} endpoint with not empty database.
+        """
+        # Assume day_id for Monday is 2
+        day_id = 2
+        response = self.client.get(f"/api/traffic/day/{day_id}")
+        self.assertEqual(response.status_code, 200)        
+        self.assertNotEqual(response.json(), [])
+    
 
     def test_get_daily_avg_aqi_database_error(self):
         """
