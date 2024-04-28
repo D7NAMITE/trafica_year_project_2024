@@ -4,6 +4,7 @@ import streamlit_shadcn_ui as ui
 
 st.set_page_config(layout="wide")
 
+
 st.title("🚥 Trafica - 2024 Year Project")
 
 
@@ -70,11 +71,18 @@ with overview_tab:
 
     st.write('You selected:', option)
 
-    data_cols = st.columns(3)
+    sub_cols_aqi = st.columns(3)
+    with sub_cols_aqi[0]:
+        ui.metric_card(title="Average AQI", content=f"45", description="AQI-US")
+    with sub_cols_aqi[1]:
+        ui.metric_card(title="Average PM2.5", content=f"17", description="µg/m³")
+    with sub_cols_aqi[2]:
+        ui.metric_card(title="Average Sound Level", content=f"25", description="dB")
 
-    with data_cols[0]:
-        sub_cols_aqi = st.columns(2)
-        with sub_cols_aqi[0]:
-            ui.metric_card(title="Average AQI", content=f"45", description="AQI-US")
-        with sub_cols_aqi[1]:
-            ui.metric_card(title="Average PM2.5", content=f"17", description="µg/m³")
+    sub_cols_traffic = st.columns(3)
+    with sub_cols_traffic[0]:
+        ui.metric_card(title="Average Vibhavadi Rd. Traffic", content=f"55", description="KM/H")
+    with sub_cols_traffic[1]:
+        ui.metric_card(title="Average Ngamwongwan Rd. Traffic", content=f"51", description="KM/H")
+    with sub_cols_traffic[2]:
+        ui.metric_card(title="Average Phahonyothin Rd. Traffic", content=f"60", description="KM/H")
