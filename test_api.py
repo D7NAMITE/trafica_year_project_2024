@@ -125,6 +125,13 @@ class TestAPI(unittest.TestCase):
         day_id = 3
         response = self.client.get(f"/api/noise/day/{day_id}")
         self.assertEqual(response.status_code, 500)
+    
+    def test_get_daily_avg_traffic_database_error(self):
+        """
+        Test case for database error handling in /api/traffic/avg/daily endpoint.
+        """
+        response = self.client.get("/api/traffic/avg/daily")
+        self.assertEqual(response.status_code, 500)
 
 
 if __name__ == '__main__':
