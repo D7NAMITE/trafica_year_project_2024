@@ -199,12 +199,15 @@ class TestAPI(unittest.TestCase):
     
     def test_invalid_road_ids(self):
         """Test with invalid road_id values."""
-        invalid_road_ids = [0, 4, -1, 'abc']
+        invalid_road_ids = [0, 4, -1]
         for road_id in invalid_road_ids:
             with self.subTest(road_id=road_id):
                 response = self.client.get(f"/api/traffic/road/{road_id}")
                 self.assertEqual(response.status_code, 404)
-
+        
+         # Test with non-integer road_id value
+        response = self.client.get("/api/traffic/road/helloworld")
+        self.assertEqual(response.status_code, 422)
 
 if __name__ == '__main__':
     unittest.main()
