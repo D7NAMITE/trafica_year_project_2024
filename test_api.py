@@ -25,7 +25,7 @@ class TestAPI(unittest.TestCase):
         response = self.client.get(f"/api/aqi/day/{day_id}")
         self.assertEqual(response.status_code, 200)
     
-    def test_get_daily_avg_noise(self):
+    def test_get_daily_avg_noise_success(self):
         """
         Test case for successful response of /api/noise/avg/daily endpoint.
         """
