@@ -208,6 +208,15 @@ class TestAPI(unittest.TestCase):
          # Test with non-integer road_id value
         response = self.client.get("/api/traffic/road/helloworld")
         self.assertEqual(response.status_code, 422)
+    
+    def test_valid_day_ids(self):
+        """Test with valid day_id values within the range 1 to 7."""
+        valid_day_ids = [1, 2, 3, 4, 5, 6, 7]
+        for day_id in valid_day_ids:
+            with self.subTest(day_id=day_id):
+                response = self.client.get(f"/api/traffic/day/{day_id}")
+                self.assertEqual(response.status_code, 200)
+
 
 if __name__ == '__main__':
     unittest.main()
