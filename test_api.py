@@ -122,6 +122,16 @@ class TestAPI(unittest.TestCase):
         self.assertEqual(response.status_code, 200)        
         self.assertNotEqual(response.json(), [])
 
+    def test_get_road_traffic_non_empty_database(self):
+        """
+        Test case for /api/traffic/road/{road_id} endpoint with not empty database.
+        """
+        # Assume road_id for ngamwongwan is 2
+        road_id = 2
+        response = self.client.get(f"/api/traffic/road/{road_id}")
+        self.assertEqual(response.status_code, 200)        
+        self.assertNotEqual(response.json(), [])
+
     def test_get_daily_avg_aqi_database_error(self):
         """
         Test case for database error handling in /api/aqi/avg/daily endpoint.
