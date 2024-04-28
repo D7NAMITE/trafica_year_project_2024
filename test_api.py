@@ -58,6 +58,15 @@ class TestAPI(unittest.TestCase):
         day_id = 2
         response = self.client.get(f"/api/traffic/day/{day_id}")
         self.assertEqual(response.status_code, 200)
+
+    def test_get_road_traffic_success(self):
+        """
+        Test case for successful response of /api/traffic/road/{road_id} endpoint.
+        """
+        # Assume day_id for Monday is 2
+        road_id = 2
+        response = self.client.get(f"/api/traffic/road/{road_id}")
+        self.assertEqual(response.status_code, 200)
     
     def test_get_daily_avg_aqi_empty_database(self):
         """
