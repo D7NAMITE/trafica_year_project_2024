@@ -33,6 +33,15 @@ class TestAPI(unittest.TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertTrue(response.json())
     
+    def test_get_day_noise_success(self):
+        """
+        Test case for successful response of /api/noise/day/{day_id} endpoint.
+        """
+        # Assume day_id for Tuesday is 3
+        day_id = 3
+        response = self.client.get(f"/api/noise/day/{day_id}")
+        self.assertEqual(response.status_code, 200)
+    
     def test_get_daily_avg_aqi_empty_database(self):
         """
         Test case for /api/aqi/avg/daily endpoint with not empty database.
@@ -73,6 +82,13 @@ class TestAPI(unittest.TestCase):
         # Assume day_id for Monday is 2
         day_id = 2
         response = self.client.get(f"/api/aqi/day/{day_id}")
+        self.assertEqual(response.status_code, 500)
+    
+    def test_get_daily_avg_noise_database_error(self):
+        """
+        Test case for database error handling in /api/noise/avg/daily endpoint.
+        """
+        response = self.client.get("/api/noise/avg/daily")
         self.assertEqual(response.status_code, 500)
         
 
