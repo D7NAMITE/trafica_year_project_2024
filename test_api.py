@@ -196,6 +196,15 @@ class TestAPI(unittest.TestCase):
             with self.subTest(road_id=road_id):
                 response = self.client.get(f"/api/traffic/road/{road_id}")
                 self.assertEqual(response.status_code, 200)
+    
+    def test_invalid_road_ids(self):
+        """Test with invalid road_id values."""
+        invalid_road_ids = [0, 4, -1, 'abc']
+        for road_id in invalid_road_ids:
+            with self.subTest(road_id=road_id):
+                response = self.client.get(f"/api/traffic/road/{road_id}")
+                self.assertEqual(response.status_code, 404)
+
 
 if __name__ == '__main__':
     unittest.main()
