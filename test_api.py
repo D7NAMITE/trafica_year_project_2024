@@ -179,6 +179,15 @@ class TestAPI(unittest.TestCase):
         day_id = 2
         response = self.client.get(f"/api/traffic/day/{day_id}")
         self.assertEqual(response.status_code, 500)
+    
+    def test_get_road_traffic_database_error(self):
+        """
+        Test case for database error handling in /api/traffic/road/{road_id} endpoint.
+        """
+        # Assume road_id for ngamwongwan is 2
+        road_id = 2
+        response = self.client.get(f"/api/traffic/road/{road_id}")
+        self.assertEqual(response.status_code, 500)
 
 
 if __name__ == '__main__':
