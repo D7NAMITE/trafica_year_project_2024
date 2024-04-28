@@ -216,6 +216,18 @@ class TestAPI(unittest.TestCase):
             with self.subTest(day_id=day_id):
                 response = self.client.get(f"/api/traffic/day/{day_id}")
                 self.assertEqual(response.status_code, 200)
+    
+    def test_invalid_day_ids(self):
+        """Test with invalid day_id values."""
+        invalid_day_ids = [0, 8]
+        for day_id in invalid_day_ids:
+            with self.subTest(day_id=day_id):
+                response = self.client.get(f"/api/traffic/day/{day_id}")
+                self.assertEqual(response.status_code, 404)
+
+        # Test with non-integer day_id value
+        response = self.client.get("/api/traffic/day/abc")
+        self.assertEqual(response.status_code, 422)
 
 
 if __name__ == '__main__':
