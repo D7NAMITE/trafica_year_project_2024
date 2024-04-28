@@ -63,7 +63,7 @@ class TestAPI(unittest.TestCase):
         """
         Test case for successful response of /api/traffic/road/{road_id} endpoint.
         """
-        # Assume day_id for Monday is 2
+        # Assume road_id for ngamwongwan road is 2
         road_id = 2
         response = self.client.get(f"/api/traffic/road/{road_id}")
         self.assertEqual(response.status_code, 200)
