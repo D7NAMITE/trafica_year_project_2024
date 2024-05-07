@@ -63,26 +63,114 @@ knowledge on data acquisition and analytics.
 
 
 with overview_tab:
-    st.subheader("Overview")
-    option = st.selectbox(
-        'Select the day in the week',
-        ("Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"))
+    st.markdown("## 📈 Overview")
 
+    # TODO: Implement Graph combine every data
 
-    st.write('You selected:', option)
+    st.markdown("## 🔬 Detailed information")
 
-    sub_cols_aqi = st.columns(3)
-    with sub_cols_aqi[0]:
-        ui.metric_card(title="Average AQI", content=f"45", description="AQI-US")
-    with sub_cols_aqi[1]:
-        ui.metric_card(title="Average PM2.5", content=f"17", description="µg/m³")
-    with sub_cols_aqi[2]:
-        ui.metric_card(title="Average Sound Level", content=f"25", description="dB")
+    st.markdown("### AQI-US")
+    with st.expander("AQI-US"):
+        sub_cols_aqi = st.columns(3)
+        with sub_cols_aqi[0]:
+            ui.metric_card(title="Average AQI-US",
+                           content=f"{45} AQI-US",
+                           description="From 15 - 28 May 2024")
+        with sub_cols_aqi[1]:
+            ui.metric_card(title="Minimum AQI-US",
+                           content=f"{45} AQI-US",
+                           # TODO: implement date time for description
+                           description=f"From {1}")
+        with sub_cols_aqi[2]:
+            ui.metric_card(title="Maximum AQI-US",
+                           content=f"{45} AQI-US",
+                           # TODO: implement date time for description
+                           description=f"From {2}")
 
-    sub_cols_traffic = st.columns(3)
-    with sub_cols_traffic[0]:
-        ui.metric_card(title="Average Vibhavadi Rd. Traffic", content=f"55", description="KM/H")
-    with sub_cols_traffic[1]:
-        ui.metric_card(title="Average Ngamwongwan Rd. Traffic", content=f"51", description="KM/H")
-    with sub_cols_traffic[2]:
-        ui.metric_card(title="Average Phahonyothin Rd. Traffic", content=f"60", description="KM/H")
+    st.markdown("### PM2.5")
+    with st.expander("PM2.5"):
+        sub_cols_pm25 = st.columns(3)
+        with sub_cols_pm25[0]:
+            ui.metric_card(title="Average PM2.5",
+                           content=f"{17} µg/m³",
+                           description="From 15 - 28 May 2024")
+        with sub_cols_pm25[1]:
+            ui.metric_card(title="Minimum PM2.5",
+                           content=f"{17} µg/m³",
+                           # TODO: implement date time for description
+                           description=f"From {1}")
+        with sub_cols_pm25[2]:
+            ui.metric_card(title="Maximum PM2.5",
+                           content=f"{17} µg/m³",
+                           # TODO: implement date time for description
+                           description=f"From {2}")
+
+    st.markdown("### Sound Level")
+    with st.expander("Sound Level"):
+        sub_cols_noise = st.columns(3)
+        with sub_cols_noise[0]:
+            ui.metric_card(title="Average Sound Level",
+                           content=f"{17} dB",
+                           description="From 15 - 28 May 2024")
+        with sub_cols_noise[1]:
+            ui.metric_card(title="Minimum Sound Level",
+                           content=f"{17} dB",
+                           # TODO: implement date time for description
+                           description=f"From {1}")
+        with sub_cols_noise[2]:
+            ui.metric_card(title="Maximum Sound Level",
+                           content=f"{17} dB",
+                           # TODO: implement date time for description
+                           description=f"From {2}")
+
+    st.markdown("### Traffic")
+    with st.expander("Vibhavadi Rd."):
+        sub_cols_traffic_vibha = st.columns(3)
+        with sub_cols_traffic_vibha[0]:
+            ui.metric_card(title="Average Vibhavadi Rd. Traffic",
+                           content=f"{55} KM/H",
+                           description="From 15 - 28 May 2024")
+        with sub_cols_traffic_vibha[1]:
+            ui.metric_card(title="Average Vibhavadi Rd. Traffic",
+                           content=f"{55}",
+                           # TODO: implement date time for description
+                           description=f"From {1}")
+        with sub_cols_traffic_vibha[2]:
+            ui.metric_card(title="Average Vibhavadi Rd. Traffic",
+                           content=f"{55} KM/H",
+                           # TODO: implement date time for description
+                           description=f"From {1}")
+
+    with st.expander("Ngamwongwan Rd."):
+        sub_cols_traffic_ngam = st.columns(3)
+        with sub_cols_traffic_ngam[0]:
+            ui.metric_card(title="Average Ngamwongwan Rd. Traffic",
+                           content=f"{55} KM/H",
+                           description="From 15 - 28 May 2024")
+        with sub_cols_traffic_ngam[1]:
+            ui.metric_card(title="Minimum Ngamwongwan Rd. Traffic",
+                           content=f"{55} KM/H",
+                           # TODO: implement date time for description
+                           description=f"From {1}")
+        with sub_cols_traffic_ngam[2]:
+            ui.metric_card(title="Maximum Ngamwongwan Rd. Traffic",
+                           content=f"{55} KM/H",
+                           # TODO: implement date time for description
+                           description=f"From {1}")
+
+    with st.expander("Phahonyothin Rd."):
+        sub_cols_traffic_phahon = st.columns(3)
+        with sub_cols_traffic_phahon[0]:
+            ui.metric_card(title="Average Phahonyothin Rd. Traffic",
+                           content=f"{55} KM/H",
+                           description="From 15 - 28 May 2024")
+        with sub_cols_traffic_phahon[1]:
+            ui.metric_card(title="Minimum Phahonyothin Rd. Traffic",
+                           content=f"{55} KM/H",
+                           # TODO: implement date time for description
+                           description=f"From {1}")
+        with sub_cols_traffic_phahon[2]:
+            ui.metric_card(title="Maximum Phahonyothin Rd. Traffic",
+                           content=f"{55} KM/H",
+                           # TODO: implement date time for description
+                           description=f"From {1}")
