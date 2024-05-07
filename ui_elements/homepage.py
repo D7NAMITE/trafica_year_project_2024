@@ -174,5 +174,3 @@ with overview_tab:
                            content=f"{55} KM/H",
                            # TODO: implement date time for description
                            description=f"From {1}")
-
-    st.markdown("> Data From 15 - 28 May 2024")
