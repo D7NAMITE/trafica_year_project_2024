@@ -67,9 +67,8 @@ with overview_tab:
 
     # TODO: Implement Graph combine every data
 
-    st.markdown("## 🔬 Detailed information")
+    st.markdown("## 🔬 Statistical Figures")
 
-    st.markdown("### AQI-US")
     with st.expander("AQI-US"):
         sub_cols_aqi = st.columns(3)
         with sub_cols_aqi[0]:
@@ -87,7 +86,6 @@ with overview_tab:
                            # TODO: implement date time for description
                            description=f"From {2}")
 
-    st.markdown("### PM2.5")
     with st.expander("PM2.5"):
         sub_cols_pm25 = st.columns(3)
         with sub_cols_pm25[0]:
@@ -105,7 +103,6 @@ with overview_tab:
                            # TODO: implement date time for description
                            description=f"From {2}")
 
-    st.markdown("### Sound Level")
     with st.expander("Sound Level"):
         sub_cols_noise = st.columns(3)
         with sub_cols_noise[0]:
@@ -123,7 +120,6 @@ with overview_tab:
                            # TODO: implement date time for description
                            description=f"From {2}")
 
-    st.markdown("### Traffic")
     with st.expander("Vibhavadi Rd."):
         sub_cols_traffic_vibha = st.columns(3)
         with sub_cols_traffic_vibha[0]:
