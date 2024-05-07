@@ -53,11 +53,13 @@ async def get_avg_aqi() -> AQIValues:
     with pool.connection() as conn, conn.cursor() as cs:
         cs.execute("""
             SELECT AVG(AQI_US) as AVG_AQI_US, 
-            AVG(PM25) as AVG_PM25 FROM YP_AQI;
+            AVG(PM25) as AVG_PM25 
+            FROM YP_AQI;
         """)
         result = cs.fetchone()
         AQI_US, PM25 = result
         return AQIValues(date=datetime.now(), aqi_us=AQI_US, pm25=PM25)
+
 
 @app.get("/api/aqi/avg/daily")
 async def get_daily_avg_aqi() -> list[AQIValues]:
@@ -166,6 +168,19 @@ async def get_max_pm25() -> PM25Values:
         return PM25Values(date=DATE, pm25=PM25)
 
 
+@app.get("/api/noise/avg")
+async def get_noise_aqi() -> NoiseValues:
+    """Return the average noise level of the whole dataset included.
+    """
+    with pool.connection() as conn, conn.cursor() as cs:
+        cs.execute("""
+            SELECT AVG(AVG) as AVG_NOISE
+            FROM YP_NOISE;
+        """)
+        result = cs.fetchone()
+        return NoiseValues(date=datetime.now(), dB=result[0])
+
+
 @app.get("/api/noise/avg/daily")
 async def get_daily_avg_noise() -> list[NoiseValues]:
     """Return average noise value of each day in decibel"""
@@ -230,6 +245,29 @@ async def get_day_noise(day_id: int) -> list[NoiseValues]:
             raise HTTPException(status_code=404,
                                 detail="[Noise] Data not found")
     return result
+
+
+@app.get('/api/traffic/avg')
+async def get_avg_traffic() -> list[TrafficValues]:
+    """Return the average traffic values (high flow/ no traffic) of all datasets"""
+    with pool.connection() as conn, conn.cursor() as cs:
+        cs.execute("""
+        SELECT sector, 
+            AVG(currSpeed), 
+            AVG(freeFlowSpeed), 
+            SUM(roadClosure)
+            FROM YP_TRAFFIC
+            GROUP BY sector;
+        """)
+        result = [TrafficValues(date=datetime.now(),
+                                sector=sector,
+                                curr_speed=currSpeed,
+                                freeflow_speed=freeFlowSpeed,
+                                road_closure=roadClosure
+                                )
+                  for sector, currSpeed, freeFlowSpeed, roadClosure in
+                  cs.fetchall()]
+        return result
 
 
 @app.get('/api/traffic/avg/daily')
@@ -307,3 +345,50 @@ async def get_road_traffic(road_id: int):
                                 detail="[Traffic] Data not found")
     return result
 
+
+@app.get('/api/traffic/min')
+async def get_min_traffic() -> list[TrafficValues]:
+    """Return the minimum traffic values (the most traffic) of all datasets"""
+    with pool.connection() as conn, conn.cursor() as cs:
+        cs.execute("""
+        SELECT
+        sector, 
+        MIN(currSpeed), 
+        MIN(freeFlowSpeed), 
+        MIN(roadClosure)
+        FROM YP_TRAFFIC
+        GROUP BY sector;
+        """)
+        result = [TrafficValues(date=datetime.now(),
+                                sector=sector,
+                                curr_speed=currSpeed,
+                                freeflow_speed=freeFlowSpeed,
+                                road_closure=roadClosure
+                                )
+                  for sector, currSpeed, freeFlowSpeed, roadClosure in
+                  cs.fetchall()]
+        return result
+
+
+@app.get('/api/traffic/max')
+async def get_max_traffic() -> list[TrafficValues]:
+    """Return the maximum traffic values (the least traffic) of all datasets"""
+    with pool.connection() as conn, conn.cursor() as cs:
+        cs.execute("""
+        SELECT
+        sector, 
+        MAX(currSpeed), 
+        MAX(freeFlowSpeed), 
+        MAX(roadClosure)
+        FROM YP_TRAFFIC
+        GROUP BY sector;
+        """)
+        result = [TrafficValues(date=datetime.now(),
+                                sector=sector,
+                                curr_speed=currSpeed,
+                                freeflow_speed=freeFlowSpeed,
+                                road_closure=roadClosure
+                                )
+                  for sector, currSpeed, freeFlowSpeed, roadClosure in
+                  cs.fetchall()]
+        return result
