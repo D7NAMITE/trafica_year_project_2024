@@ -7,6 +7,14 @@ class TestAPI(unittest.TestCase):
 
     def setUp(self):
         self.client = TestClient(app)
+    
+    def test_get_avg_aqi_success(self):
+        """
+        Test case for successful response of /api/aqi/avg endpoint.
+        """
+        response = self.client.get("/api/aqi/avg")
+        self.assertEqual(response.status_code, 200)
+        self.assertTrue(response.json())
 
     def test_get_daily_avg_aqi_success(self):
         """
@@ -25,6 +33,46 @@ class TestAPI(unittest.TestCase):
         response = self.client.get(f"/api/aqi/day/{day_id}")
         self.assertEqual(response.status_code, 200)
     
+    def test_get_min_aqi_us_success(self):
+        """
+        Test case for successful response of /api/aqi/min/aqi_us endpoint.
+        """
+        response = self.client.get("/api/aqi/min/aqi_us")
+        self.assertEqual(response.status_code, 200)
+        self.assertTrue(response.json())
+    
+    def test_get_max_aqi_us_success(self):
+        """
+        Test case for successful response of /api/aqi/max/aqi_us endpoint.
+        """
+        response = self.client.get("/api/aqi/max/aqi_us")
+        self.assertEqual(response.status_code, 200)
+        self.assertTrue(response.json())
+    
+    def test_get_min_pm25_success(self):
+        """
+        Test case for successful response of /api/aqi/min/pm25 endpoint.
+        """
+        response = self.client.get("/api/aqi/min/pm25")
+        self.assertEqual(response.status_code, 200)
+        self.assertTrue(response.json())
+    
+    def test_get_max_pm25_success(self):
+        """
+        Test case for successful response of /api/aqi/max/pm25 endpoint.
+        """
+        response = self.client.get("/api/aqi/max/pm25")
+        self.assertEqual(response.status_code, 200)
+        self.assertTrue(response.json())
+    
+    def test_get_noise_aqi_success(self):
+        """
+        Test case for successful response of /api/noise/avg endpoint.
+        """
+        response = self.client.get("/api/noise/avg")
+        self.assertEqual(response.status_code, 200)
+        self.assertTrue(response.json())
+
     def test_get_daily_avg_noise_success(self):
         """
         Test case for successful response of /api/noise/avg/daily endpoint.
@@ -33,6 +81,22 @@ class TestAPI(unittest.TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertTrue(response.json())
     
+    def test_get_min_noise_success(self):
+        """
+        Test case for successful response of /api/noise/min endpoint.
+        """
+        response = self.client.get("/api/noise/min")
+        self.assertEqual(response.status_code, 200)
+        self.assertTrue(response.json())
+    
+    def test_get_max_noise_success(self):
+        """
+        Test case for successful response of /api/noise/max endpoint.
+        """
+        response = self.client.get("/api/noise/max")
+        self.assertEqual(response.status_code, 200)
+        self.assertTrue(response.json())
+
     def test_get_day_noise_success(self):
         """
         Test case for successful response of /api/noise/day/{day_id} endpoint.
@@ -41,6 +105,14 @@ class TestAPI(unittest.TestCase):
         day_id = 3
         response = self.client.get(f"/api/noise/day/{day_id}")
         self.assertEqual(response.status_code, 200)
+    
+    def test_get_avg_traffic_success(self):
+        """
+        Test case for successful response of /api/traffic/avg endpoint.
+        """
+        response = self.client.get("/api/traffic/avg")
+        self.assertEqual(response.status_code, 200)
+        self.assertTrue(response.json())
     
     def test_get_daily_avg_traffic_success(self):
         """
@@ -68,7 +140,23 @@ class TestAPI(unittest.TestCase):
         response = self.client.get(f"/api/traffic/road/{road_id}")
         self.assertEqual(response.status_code, 200)
     
-    def test_get_daily_avg_aqi_empty_database(self):
+    def test_get_min_traffic_success(self):
+        """
+        Test case for successful response of /api/traffic/min endpoint.
+        """
+        response = self.client.get(f"/api/traffic/min")
+        self.assertEqual(response.status_code, 200)
+        self.assertTrue(response.json())
+    
+    def test_get_avg_aqi_non_empty_database(self):
+        """
+        Test case for /api/aqi/avg endpoint with not empty database.
+        """
+        response = self.client.get("/api/aqi/avg")
+        self.assertEqual(response.status_code, 200)        
+        self.assertNotEqual(response.json(), [])
+
+    def test_get_daily_avg_aqi_non_empty_database(self):
         """
         Test case for /api/aqi/avg/daily endpoint with not empty database.
         """
@@ -85,12 +173,68 @@ class TestAPI(unittest.TestCase):
         response = self.client.get(f"/api/aqi/day/{day_id}")
         self.assertEqual(response.status_code, 200)        
         self.assertNotEqual(response.json(), [])
-
+    
+    def test_get_min_aqi_us_non_empty_database(self):
+        """
+        Test case for /api/aqi/min/aqi_us endpoint with not empty database.
+        """
+        response = self.client.get(f"/api/aqi/min/aqi_us")
+        self.assertEqual(response.status_code, 200)        
+        self.assertNotEqual(response.json(), [])
+    
+    def test_get_max_aqi_us_non_empty_database(self):
+        """
+        Test case for /api/aqi/max/aqi_us endpoint with not empty database.
+        """
+        response = self.client.get(f"/api/aqi/max/aqi_us")
+        self.assertEqual(response.status_code, 200)        
+        self.assertNotEqual(response.json(), [])
+    
+    def test_get_min_pm25_non_empty_database(self):
+        """
+        Test case for /api/aqi/min/pm25 endpoint with not empty database.
+        """
+        response = self.client.get(f"/api/aqi/min/pm25")
+        self.assertEqual(response.status_code, 200)        
+        self.assertNotEqual(response.json(), [])
+    
+    def test_get_max_pm25_non_empty_database(self):
+        """
+        Test case for /api/aqi/max/pm25 endpoint with not empty database.
+        """
+        response = self.client.get(f"/api/aqi/max/pm25")
+        self.assertEqual(response.status_code, 200)        
+        self.assertNotEqual(response.json(), [])
+    
+    def test_get_noise_aqi_non_empty_database(self):
+        """
+        Test case for /api/noise/avg endpoint with not empty database.
+        """
+        response = self.client.get(f"/api/noise/avg")
+        self.assertEqual(response.status_code, 200)        
+        self.assertNotEqual(response.json(), [])
+    
     def test_get_daily_avg_noise_non_empty_database(self):
         """
         Test case for /api/noise/avg/daily endpoint with not empty database.
         """
         response = self.client.get("/api/noise/avg/daily")
+        self.assertEqual(response.status_code, 200)        
+        self.assertNotEqual(response.json(), [])
+
+    def test_get_min_noise_non_empty_database(self):
+        """
+        Test case for /api/noise/min endpoint with not empty database.
+        """
+        response = self.client.get("/api/noise/min")
+        self.assertEqual(response.status_code, 200)        
+        self.assertNotEqual(response.json(), [])
+    
+    def test_get_max_noise_non_empty_database(self):
+        """
+        Test case for /api/noise/max endpoint with not empty database.
+        """
+        response = self.client.get("/api/noise/max")
         self.assertEqual(response.status_code, 200)        
         self.assertNotEqual(response.json(), [])
     
@@ -101,6 +245,14 @@ class TestAPI(unittest.TestCase):
         # Assume day_id for Tuesday is 3
         day_id = 3
         response = self.client.get(f"/api/noise/day/{day_id}")
+        self.assertEqual(response.status_code, 200)        
+        self.assertNotEqual(response.json(), [])
+    
+    def test_get_avg_traffic_non_empty_database(self):
+        """
+        Test case for /api/traffic/avg endpoint with not empty database.
+        """
+        response = self.client.get(f"/api/traffic/avg")
         self.assertEqual(response.status_code, 200)        
         self.assertNotEqual(response.json(), [])
     
@@ -132,62 +284,21 @@ class TestAPI(unittest.TestCase):
         self.assertEqual(response.status_code, 200)        
         self.assertNotEqual(response.json(), [])
 
-    def test_get_daily_avg_aqi_database_error(self):
+    def test_get_min_traffic_non_empty_database(self):
         """
-        Test case for database error handling in /api/aqi/avg/daily endpoint.
+        Test case for /api/traffic/min endpoint with not empty database.
         """
-        response = self.client.get("/api/aqi/avg/daily")
-        self.assertEqual(response.status_code, 500)
+        response = self.client.get("/api/traffic/min")
+        self.assertEqual(response.status_code, 200)        
+        self.assertNotEqual(response.json(), [])
     
-    def test_get_day_aqi_database_error(self):
+    def test_get_max_traffic_non_empty_database(self):
         """
-        Test case for database error handling in /api/aqi/day/{day_id} endpoint.
+        Test case for /api/traffic/max endpoint with not empty database.
         """
-        # Assume day_id for Monday is 2
-        day_id = 2
-        response = self.client.get(f"/api/aqi/day/{day_id}")
-        self.assertEqual(response.status_code, 500)
-    
-    def test_get_daily_avg_noise_database_error(self):
-        """
-        Test case for database error handling in /api/noise/avg/daily endpoint.
-        """
-        response = self.client.get("/api/noise/avg/daily")
-        self.assertEqual(response.status_code, 500)
-    
-    def test_get_day_noise_database_error(self):
-        """
-        Test case for database error handling in /api/noise/day/{day_id} endpoint.
-        """
-        # Assume day_id for Tuesday is 3
-        day_id = 3
-        response = self.client.get(f"/api/noise/day/{day_id}")
-        self.assertEqual(response.status_code, 500)
-    
-    def test_get_daily_avg_traffic_database_error(self):
-        """
-        Test case for database error handling in /api/traffic/avg/daily endpoint.
-        """
-        response = self.client.get("/api/traffic/avg/daily")
-        self.assertEqual(response.status_code, 500)
-    
-    def test_get_day_traffic_database_error(self):
-        """
-        Test case for database error handling in /api/traffic/day/{day_id} endpoint.
-        """
-        # Assume day_id for Monday is 2
-        day_id = 2
-        response = self.client.get(f"/api/traffic/day/{day_id}")
-        self.assertEqual(response.status_code, 500)
-    
-    def test_get_road_traffic_database_error(self):
-        """
-        Test case for database error handling in /api/traffic/road/{road_id} endpoint.
-        """
-        # Assume road_id for ngamwongwan is 2
-        road_id = 2
-        response = self.client.get(f"/api/traffic/road/{road_id}")
-        self.assertEqual(response.status_code, 500)
+        response = self.client.get("/api/traffic/max")
+        self.assertEqual(response.status_code, 200)        
+        self.assertNotEqual(response.json(), [])
 
     def test_valid_road_ids(self):
         """Test with valid road_id values within the range 1 to 3."""
