@@ -221,6 +221,14 @@ class TestAPI(unittest.TestCase):
         response = self.client.get("/api/noise/avg/daily")
         self.assertEqual(response.status_code, 200)        
         self.assertNotEqual(response.json(), [])
+
+    def test_get_min_noise_non_empty_database(self):
+        """
+        Test case for /api/noise/min endpoint with not empty database.
+        """
+        response = self.client.get("/api/noise/min")
+        self.assertEqual(response.status_code, 200)        
+        self.assertNotEqual(response.json(), [])
     
     def test_get_day_noise_non_empty_database(self):
         """
