@@ -89,10 +89,35 @@ knowledge on data acquisition and analytics.
             )
 
 
-with overview_tab:
-    st.markdown("## 📈 Overview")
+with (((overview_tab))):
+    st.markdown("## 🔎 Overview")
+    daily_aqi = requests.get("http://127.0.0.1:8000/api/aqi/avg/daily").json()
+    df_daily_aqi = pd.DataFrame(daily_aqi)
+    df_daily_aqi["date"] = pd.to_datetime(df_daily_aqi["date"])
 
-    # TODO: Implement Graph combine every data
+    daily_noise = requests.get("http://127.0.0.1:8000/api/noise/avg/daily").json()
+    df_daily_noise = pd.DataFrame(daily_noise)
+    df_daily_noise["date"] = pd.to_datetime(df_daily_noise["date"])
+
+    daily_traffic = requests.get("http://127.0.0.1:8000/api/traffic/avg/daily").json()
+    df_daily_traffic = pd.DataFrame(daily_traffic)
+    df_daily_traffic["date"] = pd.to_datetime(df_daily_traffic["date"])
+
+    df_traffic_sector_1 = (df_daily_traffic[df_daily_traffic['sector'] == 1])
+    df_traffic_sector_1.rename(columns={'curr_speed': 'Vibhavadi speed'}, inplace=True)
+    df_traffic_sector_1 = df_traffic_sector_1.loc[:, ["date", "Vibhavadi speed"]]
+    df_traffic_sector_2 = (df_daily_traffic[df_daily_traffic['sector'] == 2])
+    df_traffic_sector_2.rename(columns={'curr_speed': 'Ngamwongwan speed'}, inplace=True)
+    df_traffic_sector_2 = df_traffic_sector_2.loc[:,["date", "Ngamwongwan speed"]]
+    df_traffic_sector_3 = (df_daily_traffic[df_daily_traffic['sector'] == 3])
+    df_traffic_sector_3.rename(columns={'curr_speed': 'Phahonyothin speed'}, inplace=True)
+    df_traffic_sector_3 = df_traffic_sector_3.loc[:,["date", "Phahonyothin speed"]]
+    graph_df = df_traffic_sector_1.merge(df_traffic_sector_2, on='date')
+    graph_df = graph_df.merge(df_traffic_sector_3, on='date')
+    graph_df = graph_df.merge(df_daily_noise)
+    graph_df = graph_df.merge(df_daily_aqi)
+
+    st.line_chart(graph_df, x='date')
 
     st.markdown("## 🔬 Statistical Figures")
 
