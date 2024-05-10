@@ -198,7 +198,14 @@ class TestAPI(unittest.TestCase):
         self.assertEqual(response.status_code, 200)        
         self.assertNotEqual(response.json(), [])
     
-
+    def test_get_max_pm25_non_empty_database(self):
+        """
+        Test case for /api/aqi/max/pm25 endpoint with not empty database.
+        """
+        response = self.client.get(f"/api/aqi/max/pm25")
+        self.assertEqual(response.status_code, 200)        
+        self.assertNotEqual(response.json(), [])
+    
     def test_get_daily_avg_noise_non_empty_database(self):
         """
         Test case for /api/noise/avg/daily endpoint with not empty database.
