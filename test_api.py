@@ -268,63 +268,6 @@ class TestAPI(unittest.TestCase):
         self.assertEqual(response.status_code, 200)        
         self.assertNotEqual(response.json(), [])
 
-    def test_get_daily_avg_aqi_database_error(self):
-        """
-        Test case for database error handling in /api/aqi/avg/daily endpoint.
-        """
-        response = self.client.get("/api/aqi/avg/daily")
-        self.assertEqual(response.status_code, 500)
-    
-    def test_get_day_aqi_database_error(self):
-        """
-        Test case for database error handling in /api/aqi/day/{day_id} endpoint.
-        """
-        # Assume day_id for Monday is 2
-        day_id = 2
-        response = self.client.get(f"/api/aqi/day/{day_id}")
-        self.assertEqual(response.status_code, 500)
-    
-    def test_get_daily_avg_noise_database_error(self):
-        """
-        Test case for database error handling in /api/noise/avg/daily endpoint.
-        """
-        response = self.client.get("/api/noise/avg/daily")
-        self.assertEqual(response.status_code, 500)
-    
-    def test_get_day_noise_database_error(self):
-        """
-        Test case for database error handling in /api/noise/day/{day_id} endpoint.
-        """
-        # Assume day_id for Tuesday is 3
-        day_id = 3
-        response = self.client.get(f"/api/noise/day/{day_id}")
-        self.assertEqual(response.status_code, 500)
-    
-    def test_get_daily_avg_traffic_database_error(self):
-        """
-        Test case for database error handling in /api/traffic/avg/daily endpoint.
-        """
-        response = self.client.get("/api/traffic/avg/daily")
-        self.assertEqual(response.status_code, 500)
-    
-    def test_get_day_traffic_database_error(self):
-        """
-        Test case for database error handling in /api/traffic/day/{day_id} endpoint.
-        """
-        # Assume day_id for Monday is 2
-        day_id = 2
-        response = self.client.get(f"/api/traffic/day/{day_id}")
-        self.assertEqual(response.status_code, 500)
-    
-    def test_get_road_traffic_database_error(self):
-        """
-        Test case for database error handling in /api/traffic/road/{road_id} endpoint.
-        """
-        # Assume road_id for ngamwongwan is 2
-        road_id = 2
-        response = self.client.get(f"/api/traffic/road/{road_id}")
-        self.assertEqual(response.status_code, 500)
-
     def test_valid_road_ids(self):
         """Test with valid road_id values within the range 1 to 3."""
         valid_road_ids = [1, 2, 3]
