@@ -147,6 +147,14 @@ class TestAPI(unittest.TestCase):
         response = self.client.get(f"/api/traffic/min")
         self.assertEqual(response.status_code, 200)
         self.assertTrue(response.json())
+    
+    def test_get_avg_aqi_non_empty_database(self):
+        """
+        Test case for /api/aqi/avg endpoint with not empty database.
+        """
+        response = self.client.get("/api/aqi/avg")
+        self.assertEqual(response.status_code, 200)        
+        self.assertNotEqual(response.json(), [])
 
     def test_get_daily_avg_aqi_non_empty_database(self):
         """
