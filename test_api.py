@@ -7,6 +7,14 @@ class TestAPI(unittest.TestCase):
 
     def setUp(self):
         self.client = TestClient(app)
+    
+    def test_get_daily_avg_aqi_success(self):
+        """
+        Test case for successful response of /api/aqi/avg endpoint.
+        """
+        response = self.client.get("/api/aqi/avg")
+        self.assertEqual(response.status_code, 200)
+        self.assertTrue(response.json())
 
     def test_get_daily_avg_aqi_success(self):
         """
