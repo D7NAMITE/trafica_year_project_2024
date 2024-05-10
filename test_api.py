@@ -140,6 +140,14 @@ class TestAPI(unittest.TestCase):
         response = self.client.get(f"/api/traffic/road/{road_id}")
         self.assertEqual(response.status_code, 200)
     
+    def test_get_min_traffic_success(self):
+        """
+        Test case for successful response of /api/traffic/min endpoint.
+        """
+        response = self.client.get(f"/api/traffic/min")
+        self.assertEqual(response.status_code, 200)
+        self.assertTrue(response.json())
+
     def test_get_daily_avg_aqi_empty_database(self):
         """
         Test case for /api/aqi/avg/daily endpoint with not empty database.
