@@ -80,6 +80,14 @@ class TestAPI(unittest.TestCase):
         response = self.client.get("/api/noise/avg/daily")
         self.assertEqual(response.status_code, 200)
         self.assertTrue(response.json())
+    
+    def test_get_min_noise_success(self):
+        """
+        Test case for successful response of /api/noise/min endpoint.
+        """
+        response = self.client.get("/api/noise/min")
+        self.assertEqual(response.status_code, 200)
+        self.assertTrue(response.json())
 
     def test_get_day_noise_success(self):
         """
