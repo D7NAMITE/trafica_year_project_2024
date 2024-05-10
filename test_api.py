@@ -45,15 +45,15 @@ class TestAPI(unittest.TestCase):
         """
         Test case for successful response of /api/aqi/max/aqi_us endpoint.
         """
-        response = self.client.get("/api/aqi/max/aqi_us")
+        response = self.client.get("/api/aqi/min/aqi_us")
         self.assertEqual(response.status_code, 200)
         self.assertTrue(response.json())
     
-    def test_get_daily_avg_noise_success(self):
+    def test_get_min_pm25_success(self):
         """
-        Test case for successful response of /api/noise/avg/daily endpoint.
+        Test case for successful response of /api/aqi/min/pm25 endpoint.
         """
-        response = self.client.get("/api/noise/avg/daily")
+        response = self.client.get("/api/aqi/min/pm25")
         self.assertEqual(response.status_code, 200)
         self.assertTrue(response.json())
     
