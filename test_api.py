@@ -284,6 +284,14 @@ class TestAPI(unittest.TestCase):
         self.assertEqual(response.status_code, 200)        
         self.assertNotEqual(response.json(), [])
 
+    def test_get_min_traffic_non_empty_database(self):
+        """
+        Test case for /api/traffic/min endpoint with not empty database.
+        """
+        response = self.client.get("/api/traffic/min")
+        self.assertEqual(response.status_code, 200)        
+        self.assertNotEqual(response.json(), [])
+
     def test_valid_road_ids(self):
         """Test with valid road_id values within the range 1 to 3."""
         valid_road_ids = [1, 2, 3]
