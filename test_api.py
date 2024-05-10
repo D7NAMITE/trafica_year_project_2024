@@ -45,7 +45,7 @@ class TestAPI(unittest.TestCase):
         """
         Test case for successful response of /api/aqi/max/aqi_us endpoint.
         """
-        response = self.client.get("/api/aqi/min/aqi_us")
+        response = self.client.get("/api/aqi/max/aqi_us")
         self.assertEqual(response.status_code, 200)
         self.assertTrue(response.json())
     
