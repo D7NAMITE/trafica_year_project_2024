@@ -57,6 +57,14 @@ class TestAPI(unittest.TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertTrue(response.json())
     
+    def test_get_max_pm25_success(self):
+        """
+        Test case for successful response of /api/aqi/max/pm25 endpoint.
+        """
+        response = self.client.get("/api/aqi/max/pm25")
+        self.assertEqual(response.status_code, 200)
+        self.assertTrue(response.json())
+    
     def test_get_day_noise_success(self):
         """
         Test case for successful response of /api/noise/day/{day_id} endpoint.
