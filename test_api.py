@@ -8,7 +8,7 @@ class TestAPI(unittest.TestCase):
     def setUp(self):
         self.client = TestClient(app)
     
-    def test_get_daily_avg_aqi_success(self):
+    def test_get_avg_aqi_success(self):
         """
         Test case for successful response of /api/aqi/avg endpoint.
         """
