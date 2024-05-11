@@ -2,6 +2,8 @@ import pandas as pd
 import requests
 import streamlit_shadcn_ui as ui
 import streamlit as st
+import matplotlib.pyplot as plt
+import numpy as np
 
 ENDPOINT_MAX_TRAFFIC = "http://127.0.0.1:8000/api/traffic/max"
 ENDPOINT_MIN_TRAFFIC = "http://127.0.0.1:8000/api/traffic/min"
@@ -29,7 +31,7 @@ st.set_page_config(layout="wide")
 st.title("🚥 Trafica - 2024 Year Project")
 
 
-home_tab, overview_tab = st.tabs(["Home", "Overview"])
+home_tab, overview_tab, visualization_tab = st.tabs(["Home", "Overview", "Visualization"])
 
 with home_tab:
     st.header("👋Hi, Welcome to our Project")
@@ -89,7 +91,7 @@ knowledge on data acquisition and analytics.
             )
 
 
-with (((overview_tab))):
+with overview_tab:
     st.markdown("## 🔎 Overview")
     daily_aqi = requests.get("http://127.0.0.1:8000/api/aqi/avg/daily").json()
     df_daily_aqi = pd.DataFrame(daily_aqi)
@@ -124,20 +126,20 @@ with (((overview_tab))):
     aqi_avg_df = get_data(ENDPOINT_AVG_AQI)
     aqi_avg_df["date"] = pd.to_datetime(aqi_avg_df["date"])
     avg_aqi_us_date = aqi_avg_df["date"].dt.strftime("%d %B %Y").iloc[0]
-    avg_aqi_us_value = round((float(aqi_avg_df["aqi_us"])), 2)
-    avg_pm25_value = round((float(aqi_avg_df["pm25"])), 2)
+    avg_aqi_us_value = round((float(aqi_avg_df["aqi_us"].iloc[0])), 2)
+    avg_pm25_value = round((float(aqi_avg_df["pm25"].iloc[0])), 2)
 
     aqi_min_df = get_data(ENDPOINT_MIN_AQI_US)
     aqi_min_df["date"] = pd.to_datetime(aqi_min_df["date"])
     min_aqi_us_date = aqi_min_df["date"].dt.strftime("%d %B %Y").iloc[0]
-    min_aqi_us_value = round((float(aqi_min_df["aqi_us"])), 2)
+    min_aqi_us_value = round((float(aqi_min_df["aqi_us"].iloc[0])), 2)
 
     aqi_max_df = get_data(ENDPOINT_MAX_AQI_US)
     aqi_max_df["date"] = pd.to_datetime(aqi_max_df["date"])
     max_aqi_us_date = aqi_max_df["date"].dt.strftime("%d %B %Y").iloc[0]
-    max_aqi_us_value = round((float(aqi_max_df["aqi_us"])), 2)
+    max_aqi_us_value = round((float(aqi_max_df["aqi_us"].iloc[0])), 2)
 
-    with st.expander("AQI-US"):
+    with st.expander("📍 AQI-US"):
         sub_cols_aqi = st.columns(3)
         with sub_cols_aqi[0]:
             ui.metric_card(
@@ -161,14 +163,14 @@ with (((overview_tab))):
     pm25_min_df = get_data(ENDPOINT_MIN_PM25)
     pm25_min_df["date"] = pd.to_datetime(pm25_min_df["date"])
     min_pm25_date = pm25_min_df["date"].dt.strftime("%d %B %Y").iloc[0]
-    min_pm25_value = round((float(pm25_min_df["pm25"])), 2)
+    min_pm25_value = round((float(pm25_min_df["pm25"].iloc[0])), 2)
 
     pm25_max_df = get_data(ENDPOINT_MAX_PM25)
     pm25_max_df["date"] = pd.to_datetime(pm25_max_df["date"])
     max_pm25_date = pm25_max_df["date"].dt.strftime("%d %B %Y").iloc[0]
-    max_pm25_value = round((float(pm25_max_df["pm25"])), 2)
+    max_pm25_value = round((float(pm25_max_df["pm25"].iloc[0])), 2)
 
-    with st.expander("PM2.5"):
+    with st.expander("📍 PM2.5"):
         sub_cols_pm25 = st.columns(3)
         with sub_cols_pm25[0]:
             ui.metric_card(
@@ -193,19 +195,19 @@ with (((overview_tab))):
     noise_avg_df = get_data(ENDPOINT_AVG_NOISE)
     noise_avg_df["date"] = pd.to_datetime(noise_avg_df["date"])
     avg_noise_date = noise_avg_df["date"].dt.strftime("%d %B %Y").iloc[0]
-    avg_noise_value = round((float(noise_avg_df["dB"])), 2)
+    avg_noise_value = round((float(noise_avg_df["dB"].iloc[0])), 2)
 
     noise_min_df = get_data(ENDPOINT_MIN_NOISE)
     noise_min_df["date"] = pd.to_datetime(noise_min_df["date"])
     min_noise_date = noise_min_df["date"].dt.strftime("%d %B %Y").iloc[0]
-    min_noise_value = round((float(noise_min_df["dB"])), 2)
+    min_noise_value = round((float(noise_min_df["dB"].iloc[0])), 2)
 
     noise_max_df = get_data(ENDPOINT_MAX_NOISE)
     noise_max_df["date"] = pd.to_datetime(noise_max_df["date"])
     max_noise_date = noise_max_df["date"].dt.strftime("%d %B %Y").iloc[0]
-    max_noise_value = round((float(noise_max_df["dB"])), 2)
+    max_noise_value = round((float(noise_max_df["dB"].iloc[0])), 2)
 
-    with st.expander("Sound Level"):
+    with st.expander("📍 Sound Level"):
         sub_cols_noise = st.columns(3)
         with sub_cols_noise[0]:
             ui.metric_card(
@@ -231,20 +233,20 @@ with (((overview_tab))):
     traffic_avg_df["date"] = pd.to_datetime(traffic_avg_df["date"])
     avg_traffic_date = traffic_avg_df["date"].dt.strftime("%d %B %Y").iloc[0]
     avg_curr_speed_sector_1 = round(
-        float(traffic_avg_df.loc[traffic_avg_df["sector"] == 1, "curr_speed"]), 2
+        float(traffic_avg_df.loc[traffic_avg_df["sector"] == 1, "curr_speed"].iloc[0]), 2
     )
     avg_curr_speed_sector_2 = round(
-        float(traffic_avg_df.loc[traffic_avg_df["sector"] == 2, "curr_speed"]), 2
+        float(traffic_avg_df.loc[traffic_avg_df["sector"] == 2, "curr_speed"].iloc[0]), 2
     )
     avg_curr_speed_sector_3 = round(
-        float(traffic_avg_df.loc[traffic_avg_df["sector"] == 3, "curr_speed"]), 2
+        float(traffic_avg_df.loc[traffic_avg_df["sector"] == 3, "curr_speed"].iloc[0]), 2
     )
 
     min_traffic_data = requests.get(ENDPOINT_MIN_TRAFFIC).json()
     traffic_min_df = pd.DataFrame(min_traffic_data)
     traffic_min_df["date"] = pd.to_datetime(traffic_min_df["date"])
     min_curr_speed_sector_1 = round(
-        float(traffic_min_df.loc[traffic_min_df["sector"] == 1, "curr_speed"]), 2
+        float(traffic_min_df.loc[traffic_min_df["sector"] == 1, "curr_speed"].iloc[0]), 2
     )
     min_date_sector_1 = (
         traffic_min_df.loc[traffic_min_df["sector"] == 1, "date"]
@@ -252,7 +254,7 @@ with (((overview_tab))):
         .iloc[0]
     )
     min_curr_speed_sector_2 = round(
-        float(traffic_min_df.loc[traffic_min_df["sector"] == 2, "curr_speed"]), 2
+        float(traffic_min_df.loc[traffic_min_df["sector"] == 2, "curr_speed"].iloc[0]), 2
     )
     min_date_sector_2 = (
         traffic_min_df.loc[traffic_min_df["sector"] == 2, "date"]
@@ -260,7 +262,7 @@ with (((overview_tab))):
         .iloc[0]
     )
     min_curr_speed_sector_3 = round(
-        float(traffic_min_df.loc[traffic_min_df["sector"] == 3, "curr_speed"]), 2
+        float(traffic_min_df.loc[traffic_min_df["sector"] == 3, "curr_speed"].iloc[0]), 2
     )
     min_date_sector_3 = (
         traffic_min_df.loc[traffic_min_df["sector"] == 3, "date"]
@@ -272,7 +274,7 @@ with (((overview_tab))):
     traffic_max_df = pd.DataFrame(max_traffic_data)
     traffic_max_df["date"] = pd.to_datetime(traffic_max_df["date"])
     max_curr_speed_sector_1 = round(
-        float(traffic_max_df.loc[traffic_max_df["sector"] == 1, "curr_speed"]), 2
+        float(traffic_max_df.loc[traffic_max_df["sector"] == 1, "curr_speed"].iloc[0]), 2
     )
     max_date_sector_1 = (
         traffic_max_df.loc[traffic_max_df["sector"] == 1, "date"]
@@ -280,7 +282,7 @@ with (((overview_tab))):
         .iloc[0]
     )
     max_curr_speed_sector_2 = round(
-        float(traffic_max_df.loc[traffic_max_df["sector"] == 2, "curr_speed"]), 2
+        float(traffic_max_df.loc[traffic_max_df["sector"] == 2, "curr_speed"].iloc[0]), 2
     )
     max_date_sector_2 = (
         traffic_max_df.loc[traffic_max_df["sector"] == 2, "date"]
@@ -288,7 +290,7 @@ with (((overview_tab))):
         .iloc[0]
     )
     max_curr_speed_sector_3 = round(
-        float(traffic_max_df.loc[traffic_max_df["sector"] == 3, "curr_speed"]), 2
+        float(traffic_max_df.loc[traffic_max_df["sector"] == 3, "curr_speed"].iloc[0]), 2
     )
     max_date_sector_3 = (
         traffic_max_df.loc[traffic_max_df["sector"] == 3, "date"]
@@ -296,7 +298,7 @@ with (((overview_tab))):
         .iloc[0]
     )
 
-    with st.expander("Vibhavadi Rd."):
+    with st.expander("📍 Vibhavadi Rd."):
         sub_cols_traffic_vibha = st.columns(3)
         with sub_cols_traffic_vibha[0]:
             ui.metric_card(
@@ -314,7 +316,7 @@ with (((overview_tab))):
                 content=f"{max_curr_speed_sector_1} KM/H",
             )
 
-    with st.expander("Ngamwongwan Rd."):
+    with st.expander("📍 Ngamwongwan Rd."):
         sub_cols_traffic_ngam = st.columns(3)
         with sub_cols_traffic_ngam[0]:
             ui.metric_card(
@@ -332,7 +334,7 @@ with (((overview_tab))):
                 content=f"{max_curr_speed_sector_2} KM/H",
             )
 
-    with st.expander("Phahonyothin Rd."):
+    with st.expander("📍 Phahonyothin Rd."):
         sub_cols_traffic_phahon = st.columns(3)
         with sub_cols_traffic_phahon[0]:
             ui.metric_card(
@@ -349,3 +351,100 @@ with (((overview_tab))):
                 title="Maximum Phahonyothin Rd. Traffic",
                 content=f"{max_curr_speed_sector_3} KM/H",
             )
+
+with visualization_tab:
+    st.markdown("## 📈 Visualization")
+
+    with st.container(border=True):
+        st.markdown("### Data Daily Trends")
+        with st.container(border=True):
+            trend_option = st.selectbox("Which data do you want to visualize?", ("AQI", "Sound Level", "Traffic"))
+            day = st.selectbox("Which day do you want to visualize?",
+                               options=[n for n in range(1, 8)],
+                               format_func=lambda day_value: {1: "Sunday", 2: "Monday", 3: "Tuesday", 4: "Wednesday", 5: "Thursday", 6: "Friday", 7: "Saturday"}[day_value])
+
+        if trend_option == "AQI":
+            st.markdown("#### Air Quality Data")
+            aqi_day = requests.get(f"http://127.0.0.1:8000/api/aqi/day/{day}").json()
+            df_aqi_day = pd.DataFrame(aqi_day)
+            df_aqi_day["date"] = pd.to_datetime(df_aqi_day["date"])
+            aqi_first_day = df_aqi_day['date'].dt.date.min()
+            df_aqi_day = df_aqi_day[df_aqi_day['date'].dt.date == aqi_first_day]
+            st.line_chart(df_aqi_day, x="date", y=["aqi_us", "pm25"])
+
+        if trend_option == "Sound Level":
+            st.markdown("#### Sound Level Data")
+            noise_day = requests.get(f"http://127.0.0.1:8000/api/noise/day/{day}").json()
+            df_noise_day = pd.DataFrame(noise_day)
+            df_noise_day["date"] = pd.to_datetime(df_noise_day["date"])
+            noise_first_day = df_noise_day['date'].dt.date.min()
+            df_noise_day = df_noise_day[
+            df_noise_day['date'].dt.date == noise_first_day]
+            st.line_chart(df_noise_day, x="date", y="dB")
+
+        if trend_option == "Traffic":
+            st.markdown("#### Traffic Data")
+            traffic_day = requests.get(f"http://127.0.0.1:8000/api/traffic/day/{day}").json()
+            df_traffic_day = pd.DataFrame(traffic_day)
+            df_traffic_day["date"] = pd.to_datetime(df_traffic_day["date"])
+            traffic_first_day = df_traffic_day['date'].dt.date.min()
+            df_traffic_day = df_traffic_day[df_traffic_day['date'].dt.date == traffic_first_day]
+
+            sector_1_day = (df_traffic_day[df_traffic_day['sector'] == 1])
+            sector_1_day.rename(columns={'curr_speed': 'Vibhavadi speed'}, inplace=True)
+
+            sector_2_day = (df_traffic_day[df_traffic_day['sector'] == 2])
+            sector_2_day.rename(columns={'curr_speed': 'Ngamwongwan speed'},
+                                inplace=True)
+
+            sector_3_day = (df_traffic_day[df_traffic_day['sector'] == 3])
+            sector_3_day.rename(columns={'curr_speed': 'Phahonyothin speed'},
+                                inplace=True)
+
+            sector_combine = sector_1_day.merge(sector_2_day.merge(sector_3_day, on="date"), on="date")
+
+            st.line_chart(sector_combine, x="date", y=["Vibhavadi speed", "Ngamwongwan speed", "Phahonyothin speed"])
+
+    with st.container(border=True):
+        st.markdown("### Comparison between Days")
+
+        with st.container(border=True):
+            st.markdown("#### Air Quality Data")
+            aqi_day = requests.get(
+                f"http://127.0.0.1:8000/api/aqi/avg/daily").json()
+            df_aqi_day = pd.DataFrame(aqi_day)
+            df_aqi_day["date"] = pd.to_datetime(df_aqi_day["date"])
+            st.bar_chart(df_aqi_day, x="date", y=["aqi_us", "pm25"])
+
+            st.markdown("#### Sound Level Data")
+            noise_day = requests.get(
+                f"http://127.0.0.1:8000/api/noise/avg/daily").json()
+            df_noise_day = pd.DataFrame(noise_day)
+            df_noise_day["date"] = pd.to_datetime(df_noise_day["date"])
+            st.bar_chart(df_noise_day, x="date", y="dB")
+
+            st.markdown("#### Traffic Data")
+            traffic_day = requests.get(
+                f"http://127.0.0.1:8000/api/traffic/avg/daily").json()
+            df_traffic_day = pd.DataFrame(traffic_day)
+            df_traffic_day["date"] = pd.to_datetime(df_traffic_day["date"])
+
+            sector_1_day = (df_traffic_day[df_traffic_day['sector'] == 1])
+            sector_1_day.rename(columns={'curr_speed': 'Vibhavadi speed'},
+                                inplace=True)
+
+            sector_2_day = (df_traffic_day[df_traffic_day['sector'] == 2])
+            sector_2_day.rename(columns={'curr_speed': 'Ngamwongwan speed'},
+                                inplace=True)
+
+            sector_3_day = (df_traffic_day[df_traffic_day['sector'] == 3])
+            sector_3_day.rename(columns={'curr_speed': 'Phahonyothin speed'},
+                                inplace=True)
+
+            sector_combine = sector_1_day.merge(
+                sector_2_day.merge(sector_3_day, on="date"), on="date")
+
+            st.bar_chart(sector_combine, x="date",
+                          y=["Vibhavadi speed", "Ngamwongwan speed",
+                             "Phahonyothin speed"])
+
