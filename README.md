@@ -74,15 +74,6 @@ streamlit_shadcn_ui is a package of shadcn_ui component that's available to Stre
 The remaining libraries and tools are available in `requirements.txt` file. 
 You can install it by following the instruction in `Setup and Configurations Guide`
 
-## Diagrams
-**UML Class Diagram**
-![Trafica UML](https://github.com/D7NAMITE/trafica_year_project_2024/assets/33195267/ee609466-27f3-4dbc-a2db-87dac4d0e1c6)
-
-**Database Schema**
-![Trafica Database Diagram](https://github.com/D7NAMITE/trafica_year_project_2024/assets/33195267/3a0002ab-0869-4672-b475-cfbac17955a6)
-
-
-
 ## Primary Data Source
 - [Sound Meter app](https://play.google.com/store/apps/details?id=com.splendapps.decibel&hl=en&gl=US&pli=1)
 
