@@ -148,6 +148,14 @@ class TestAPI(unittest.TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertTrue(response.json())
     
+    def test_get_max_traffic_success(self):
+        """
+        Test case for successful response of /api/traffic/max endpoint.
+        """
+        response = self.client.get(f"/api/traffic/max")
+        self.assertEqual(response.status_code, 200)
+        self.assertTrue(response.json())
+    
     def test_get_avg_aqi_non_empty_database(self):
         """
         Test case for /api/aqi/avg endpoint with not empty database.
